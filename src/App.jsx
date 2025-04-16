@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import { useState } from "react";
+import ExpenseTable from "./components/ExpenseTable";
+import ExpenseForm from "./components/ExpenseForm";
+import ExpenseFilter from "./components/ExpenseFilter";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [expenses, setExpenses] = useState([
+    {
+      id: 1,
+      name: "Groceries",
+      amount: 50,
+      date: "2025-04-15",
+      description: "Weekly grocery shopping",
+    },
+    {
+      id: 2,
+      name: "Gas",
+      amount: 40,
+      date: "2025-04-10",
+      description: "Car fuel",
+    },
+    {
+      id: 3,
+      name: "Dinner",
+      amount: 75,
+      date: "2025-04-05",
+      description: "Date night",
+    },
+  ]);
+
+  const [filterTerm, setFilterTerm] = useState("");
+
+  const addExpense = (newExpense) => {
+    setExpenses([
+      ...expenses,
+      {
+        ...newExpense,
+        id: expenses.length + 1,
+      },
+    ]);
+  };
+
+  const filteredExpenses = expenses.filter((expense) => {
+    const searchTerm = filterTerm.toLowerCase();
+    return (
+      expense.name.toLowerCase().includes(searchTerm) ||
+      expense.description.toLowerCase().includes(searchTerm)
+    );
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container">
+      <h1>Expense Tracker</h1>
+      <ExpenseFilter onFilterChange={setFilterTerm} />
+      <ExpenseForm onSubmit={addExpense} />
+      <ExpenseTable expenses={filteredExpenses} />
+    </div>
+  );
 }
 
-export default App
+export default App;
