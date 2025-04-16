@@ -53,6 +53,7 @@ function App() {
   return (
     <div className="container">
       <h1>Expense Tracker</h1>
+      <p>Check out last months Expenses</p>
       <ExpenseFilter onFilterChange={setFilterTerm} />
       <ExpenseForm onSubmit={addExpense} />
       <ExpenseTable expenses={filteredExpenses} />
